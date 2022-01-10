@@ -2,8 +2,8 @@
 
 # dependencies
 /web/node_modules
-/server/node_modules
-/server/dist
+/backend/node_modules
+/backend/dist
 /node_modules
 
 # testing
