@@ -4,6 +4,7 @@
   "description": "",
   "main": "\t",
   "scripts": {
+    "start": "node index.js",
     "build": "npm --prefix frontend install && NODE_ENV=production npm --prefix frontend run build && npm --prefix backend install && NODE_ENV=production npm --prefix backend run build",
     "deploy": "cp -a frontend/build/. public/",
     "heroku-postbuild": "npm run build && npm run deploy",
