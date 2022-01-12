@@ -1,9 +1,10 @@
-export async function httpService (method, url, body) {
+export async function httpService (method, url, body, headers) {
     const params = {
         method,
         headers: {
             "Access-Control-Allow-Origin": "*",
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            ...headers
         }
     };
 
