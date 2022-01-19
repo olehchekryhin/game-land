@@ -1,19 +1,24 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import Container from 'react-bootstrap/Container';
 import Login from "../components/login/Login";
 import { httpService } from "../services/http.service";
 
+import { setAccessToken } from "../redux/auth/auth.action";
+import { setProfile } from "../redux/user/user.action";
+
 function LoginPage () {
+    const dispatch = useDispatch();
     let navigate = useNavigate();
     const [values, setValues] = useState([]);
 
-    const setFormValues = (formValues) => {
-        setValues({...values, ...formValues});
+    const setFormValues = formValues => {
+        setValues({ ...values, ...formValues });
     };
 
-    const handleInputChanges = (e) => {
+    const handleInputChanges = e => {
         e.preventDefault();
         setFormValues({ [e.currentTarget.name]: e.currentTarget.value })
     };
@@ -21,15 +26,20 @@ function LoginPage () {
     const submit = async () => {
         const { email, password } = values;
         const body = {
-            email, password
+            username: email, password
         };
 
         try {
-            const response = await httpService('POST', 'auth/login', body);
-            localStorage.setItem('access_token', JSON.parse(response).access_token);
-            navigate("/profile");
-        } catch (e) {
+            const response = JSON.parse(await httpService('POST', 'auth/login', body));
+            const { accessToken, user: { _id, email, name, username } } = response;
 
+            if (accessToken) {
+                dispatch(setProfile({ id: _id, email, name, username }));
+                dispatch(setAccessToken(accessToken));
+                navigate("/profile");
+            }
+        } catch (e) {
+            console.log(e);
         }
     };
 

@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 import { httpService } from "../services/http.service";
+import { useSelector } from "react-redux";
 
 export default function TicTacPage() {
     const initialState = [['', '', ''], ['', '', ''], ['', '', '']];
@@ -17,6 +18,7 @@ export default function TicTacPage() {
     const [ board, updateBoard ] = useState(initialState);
     const [ turn, setTurn ] = useState('x');
     const socket = useContext(SocketContext);
+    const profile = useSelector(state => state.user.profile);
 
     const create = () => {
         const gameId = (Math.random() + 1).toString(36).substring(7);
@@ -28,12 +30,6 @@ export default function TicTacPage() {
         setIsGameJoined(true);
         let games = null;
 
-        const data = {
-            gameId,
-            board,
-            turn
-        };
-
         try {
             const response = await httpService('GET', `api/game/${gameId}`);
             games = JSON.parse(response);
@@ -41,7 +37,17 @@ export default function TicTacPage() {
             console.log('Something went wrong');
         }
 
-        if (!games.length) {
+        if (!games || !games.length) {
+            const data = {
+                gameId,
+                board,
+                turn
+            };
+
+            if (profile.id) {
+                data.userId = profile.id;
+            }
+
             await httpService('POST', 'api/game', data).then(data => {
                 setGId(JSON.parse(data)._id);
             });
@@ -58,8 +64,8 @@ export default function TicTacPage() {
         setGame(e.target.value);
     };
 
-    const action = async ({ action, meetingId, data }) => {
-        socket.emit(action, { meetingId, gameId: gId, data });
+    const action = async ({ action, meetingId, data, winner }) => {
+        socket.emit(action, { meetingId, gameId: gId, data, winner: winner ? profile.id : null, userId: profile.id });
     };
 
     useEffect(() => {

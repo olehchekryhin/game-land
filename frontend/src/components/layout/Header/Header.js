@@ -1,9 +1,12 @@
-import { Link } from "react-router-dom";
-import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import './Header.scss';
-
 import logo from '../../../assets/images/game_land_logo.png'
+
+import { getAccessToken } from "../../../redux/auth/auth.selectors";
+import { resetAccessToken } from "../../../redux/auth/auth.action";
 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -11,11 +14,19 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 
-export default function Header() {
-    const accessToken = localStorage.getItem('access_token');
+function Header() {
+    const accessToken = useSelector(getAccessToken);
+    const dispatch = useDispatch();
+    let navigate = useNavigate();
+    const [ token, setToken ] = useState();
+
+    useEffect(() => {
+        setToken(accessToken);
+    }, );
 
     const logout = () => {
-        localStorage.removeItem('access_token');
+        dispatch(resetAccessToken());
+        navigate("/");
     };
 
     return (
@@ -40,7 +51,7 @@ export default function Header() {
                             </Col>
                             <Col>
                                 {
-                                    !accessToken
+                                    !token
                                         ? <Nav className='pt-2 pb-2 justify-content-end'>
                                             <Nav.Item className="px-4">
                                                 <Link to="/sign-up">Sign up</Link>
@@ -67,3 +78,5 @@ export default function Header() {
         </header>
     );
 }
+
+export default Header;

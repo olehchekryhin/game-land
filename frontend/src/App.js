@@ -1,5 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import { Routes, Route } from "react-router-dom";
+import React, {useEffect, useState, } from 'react';
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
+import { getAccessToken } from "./redux/auth/auth.selectors";
+
 import './App.css';
 import Header from "./components/layout/Header/Header";
 
@@ -8,10 +12,22 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage"
 import ProfilePage from "./pages/ProfilePage";
-import NotFound from "./pages/NotFound";
+import { setAccessToken } from "./redux/auth/auth.action";
+import { setProfile } from "./redux/user/user.action";
 
 function App() {
-    const [accessToken] = useState(localStorage.getItem('access_token'));
+    const accessToken = useSelector(getAccessToken);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        const userProfile = JSON.parse(localStorage.getItem('profile'));
+
+        if (token) {
+            dispatch(setAccessToken(token));
+            dispatch(setProfile(userProfile));
+        }
+    }, [accessToken]);
 
     return (
       <div>
@@ -19,15 +35,13 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
-            {
-                accessToken ? <Route path="/profile" element={<ProfilePage />} /> : null
-            }
+          <Route exact path="/profile" element={!accessToken ? (<Navigate to='/'/>) : (<ProfilePage/>)}/>
           <Route path="/sign-up" element={<SignUpPage />} />
           <Route path="/tic-tac" element={<TicTacPage />} />
-          <Route path="*" element={<NotFound/>} />
+            <Route exact path="*" element={<Navigate to='/'/>}/>
         </Routes>
       </div>
-);
+    );
 }
 
 export default App;

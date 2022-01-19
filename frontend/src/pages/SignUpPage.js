@@ -1,7 +1,9 @@
 import { useState } from "react";
-import Container from 'react-bootstrap/Container';
+
 import SignUp from '../components/sign-up/SignUp';
 import { httpService } from '../services/http.service';
+
+import Container from 'react-bootstrap/Container';
 
 function SignUpPage() {
     const [values, setValues] = useState([]);
@@ -27,7 +29,6 @@ function SignUpPage() {
         } catch (e) {
 
         }
-        console.log('Submit', values);
     };
 
     return (
