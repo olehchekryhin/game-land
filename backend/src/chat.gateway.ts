@@ -16,8 +16,9 @@ export class ChatGateway {
     @SubscribeMessage('message')
     handleMessage(client: Socket, data: any):void {
         this.server.to(data.meetingId).emit('message', data);
+
         if (data.gameId) {
-            this.gameService.update(data.gameId, { gameId: data.meetingId, data: data.data } );
+            this.gameService.update(data.gameId, { gameId: data.meetingId, data: data.data, winner: data.winner, userId: data.userId, userIdAdditional: data.userIdAdditional } );
         }
     }
 

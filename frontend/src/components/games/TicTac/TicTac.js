@@ -21,7 +21,7 @@ function TicTac({ socket, meetingId, emitAction, b, t, emptyBoard }) {
 
         if (!cell && !winner) {
             board[target['row']][target['cell']] = turn;
-            emitAction({ action: EVENT_TYPE.MESSAGE, meetingId, data: { board, turn: turn === TURN.CROSS ? TURN.ZERO : TURN.CROSS } });
+            emitAction({ action: EVENT_TYPE.MESSAGE, meetingId, data: { board, turn: turn === TURN.CROSS ? TURN.ZERO : TURN.CROSS }, winner: !!getTicTacWinner(board) });
         }
     };
 

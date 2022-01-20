@@ -6,9 +6,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-export default function HomePage() {
-    const url = `tic-tac`;
-
+function HomePage() {
     return (
         <div>
             <Container>
@@ -17,7 +15,7 @@ export default function HomePage() {
                     <Col xs="4">
                         <ListGroup>
                             <ListGroup.Item>
-                                <Link to={url}>Tic Tac</Link>
+                                <Link to="tic-tac">Tic Tac</Link>
                             </ListGroup.Item>
                         </ListGroup>
                     </Col>
@@ -26,3 +24,5 @@ export default function HomePage() {
         </div>
     )
 }
+
+export default HomePage;
