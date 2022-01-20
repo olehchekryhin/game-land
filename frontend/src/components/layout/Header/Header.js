@@ -1,5 +1,5 @@
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import './Header.scss';
@@ -18,11 +18,6 @@ function Header() {
     const accessToken = useSelector(getAccessToken);
     const dispatch = useDispatch();
     let navigate = useNavigate();
-    const [ token, setToken ] = useState();
-
-    useEffect(() => {
-        setToken(accessToken);
-    }, );
 
     const logout = () => {
         dispatch(resetAccessToken());
@@ -51,7 +46,7 @@ function Header() {
                             </Col>
                             <Col>
                                 {
-                                    !token
+                                    !accessToken
                                         ? <Nav className='pt-2 pb-2 justify-content-end'>
                                             <Nav.Item className="px-4">
                                                 <Link to="/sign-up">Sign up</Link>

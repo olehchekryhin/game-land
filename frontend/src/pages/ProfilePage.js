@@ -14,9 +14,13 @@ function ProfilePage() {
     const { id } = useSelector(state => state.user.profile);
 
     useEffect(async () => {
-        const profile = await httpService('GET', `api/game/profile/${id}`, null, { Authorization: `Bearer ${accessToken}` });
-        setStatistics(JSON.parse(profile));
-    }, [accessToken]);
+        try {
+            const profile = await httpService('GET', `api/game/profile/${id}`, null, { Authorization: `Bearer ${accessToken}` });
+            setStatistics(JSON.parse(profile));
+        } catch (e) {
+
+        }
+    }, [accessToken, id]);
 
     return (
         <div className="profile">

@@ -19,10 +19,10 @@ export class GameService {
         let winner;
         let looser;
         try {
-            const games = await this.gameModel.find({ "userId": id });
-            console.log(id);
+            const games = await this.gameModel.find().or([{ userId: id }, { userIdAdditional: id }]);
+
             winner = games.filter(g => g.winner === id).length;
-            looser = games.filter(g => g.winner !== id).length;
+            looser = games.filter(g => !g.winner || g.winner !== id).length;
         } catch (e) {
 
         }
@@ -37,9 +37,9 @@ export class GameService {
         return createdGame.save();
     }
 
-    async update(id, { gameId, data, winner, userId }: CreateGameDto): Promise<any> {
+    async update(id, { gameId, data, winner, userId, userIdAdditional }: CreateGameDto): Promise<any> {
         if (data) {
-            const game = this.gameModel.findByIdAndUpdate(id, { gameId, data, winner, userId }).setOptions({ overwrite: true, new: true });
+            const game = this.gameModel.findByIdAndUpdate(id, { gameId, data, winner, userId, userIdAdditional }).setOptions({ overwrite: true, new: true });
 
             if (!game) {
                 throw new NotFoundException();

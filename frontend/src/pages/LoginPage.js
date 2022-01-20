@@ -25,9 +25,7 @@ function LoginPage () {
 
     const submit = async () => {
         const { email, password } = values;
-        const body = {
-            username: email, password
-        };
+        const body = { username: email, password };
 
         try {
             const response = JSON.parse(await httpService('POST', 'auth/login', body));

@@ -1,4 +1,4 @@
-const getTicTacWinner = (board) => {
+export const getTicTacWinner = (board) => {
     for (let i = 0; i < board.length; i++) {
         if (board[i].every(val => val === board[i][0])) {
             return board[i][0];
@@ -17,7 +17,3 @@ const getTicTacWinner = (board) => {
 
     return null;
 };
-
-export {
-    getTicTacWinner
-}

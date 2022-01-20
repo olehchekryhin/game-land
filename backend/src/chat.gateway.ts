@@ -18,7 +18,7 @@ export class ChatGateway {
         this.server.to(data.meetingId).emit('message', data);
 
         if (data.gameId) {
-            this.gameService.update(data.gameId, { gameId: data.meetingId, data: data.data, winner: data.winner, userId: data.userId } );
+            this.gameService.update(data.gameId, { gameId: data.meetingId, data: data.data, winner: data.winner, userId: data.userId, userIdAdditional: data.userIdAdditional } );
         }
     }
 

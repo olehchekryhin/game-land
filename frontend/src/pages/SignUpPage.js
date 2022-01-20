@@ -19,9 +19,7 @@ function SignUpPage() {
 
     const submit = async () => {
         const { name, username, email, password } = values;
-        const body = {
-            name, username, email, password
-        };
+        const body = { name, username, email, password };
 
         try {
             const response = await httpService('POST', 'api/user', body);
